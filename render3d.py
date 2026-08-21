@@ -10,6 +10,7 @@ generated as parametric surfaces and passed to matplotlib's plot_surface.
 import numpy as np
 
 CANVAS_BG = "#FBF7F0"
+EYE_COLOUR = "#2E2440"
 
 
 def _ellipsoid(ax, centre, radii, colour, n=18):
@@ -61,6 +62,12 @@ def _animal(ax, c, s, p):
     _cylinder(ax, (-body - 0.35 * s, 0, body * 0.3), 0.1 * s, 0.8 * s,
               col["accent"], axis="x")
 
+    # Eyes, so the 3D view matches the 2D one (round 2 evaluation finding).
+    for dy in (-1, 1):
+        _ellipsoid(ax, (hx + head_r * 0.80, dy * head_r * 0.42,
+                        hz + head_r * 0.22),
+                   (head_r * 0.20,) * 3, EYE_COLOUR, n=10)
+
 
 def _plant(ax, c, s, p):
     col = c["colors"]
@@ -101,6 +108,10 @@ def _human(ax, c, s, p):
     _ellipsoid(ax, (0, 0, hz), (head_r,) * 3, col["head"])
     _ellipsoid(ax, (0, 0, hz + head_r * 0.45),
                (head_r * 1.02, head_r * 1.02, head_r * 0.55), col["accent"])
+
+    for dy in (-1, 1):
+        _ellipsoid(ax, (head_r * 0.88, dy * head_r * 0.34, hz + head_r * 0.1),
+                   (head_r * 0.19,) * 3, EYE_COLOUR, n=10)
 
 
 DRAWERS = {"animal": _animal, "plant": _plant, "human": _human}
